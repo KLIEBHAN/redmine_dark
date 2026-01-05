@@ -90,6 +90,10 @@ body.dark #top-menu {
     background-color: transparent !important;
 }
 
+body.dark #top-menu #loggedas {
+    color: var(--dark-pastel-single-invert) !important;
+}
+
 body.dark #header a,
 body.dark #top-menu a,
 body.dark #content h1,
@@ -326,6 +330,10 @@ body.dark.theme-Rtmaterial #my-page tr.overdue td.id {
 
     body #top-menu {
         background-color: transparent !important;
+    }
+
+    body #top-menu #loggedas {
+        color: var(--dark-pastel-single-invert) !important;
     }
 
     body #header a,

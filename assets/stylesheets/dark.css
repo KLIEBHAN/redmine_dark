@@ -52,6 +52,7 @@ body.dark:not(.theme-Rtmaterial) .icon {
 }
 
 body.dark svg.icon-svg {
+    filter: invert(100%);
     stroke: var(--dark-pastel-double-invert) !important;
 }
 
@@ -304,6 +305,7 @@ body.dark.theme-Rtmaterial #my-page tr.overdue td.id {
     }
 
     body svg.icon-svg {
+        filter: invert(100%);
         stroke: var(--dark-pastel-double-invert) !important;
     }
 

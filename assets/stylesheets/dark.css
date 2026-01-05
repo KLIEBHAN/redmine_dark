@@ -157,7 +157,17 @@ body.dark .flyout-menu {
 }
 
 /* Buttons and notices */
-body.dark input[type="submit"],
+body.dark input[type="submit"] {
+    background-color: var(--dark-accent) !important;
+    color: var(--dark-text-inverted) !important;
+    border: 1px solid var(--dark-accent) !important;
+}
+
+body.dark input[type="submit"]:hover {
+    background-color: var(--dark-accent-secondary) !important;
+    border-color: var(--dark-accent-secondary) !important;
+}
+
 body.dark div.flash.notice {
     background-color: var(--dark-hover);
 }
@@ -399,7 +409,17 @@ body.dark.theme-Rtmaterial #my-page tr.overdue td.id {
     }
 
     /* Buttons and notices */
-    body input[type="submit"],
+    body input[type="submit"] {
+        background-color: var(--dark-accent) !important;
+        color: var(--dark-text-inverted) !important;
+        border: 1px solid var(--dark-accent) !important;
+    }
+
+    body input[type="submit"]:hover {
+        background-color: var(--dark-accent-secondary) !important;
+        border-color: var(--dark-accent-secondary) !important;
+    }
+
     body div.flash.notice {
         background-color: var(--dark-hover);
     }

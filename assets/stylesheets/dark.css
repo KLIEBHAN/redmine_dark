@@ -51,8 +51,14 @@ body.dark:not(.theme-Rtmaterial) .icon {
     color: var(--dark-pastel-double-invert) !important;
 }
 
+/* Standalone SVGs (not inside .icon) need inversion */
 body.dark svg.icon-svg {
-    stroke: var(--dark-pastel-double-invert) !important;
+    filter: invert(100%);
+}
+
+/* SVGs inside .icon - parent already has filter, don't double-invert */
+body.dark .icon svg.icon-svg {
+    filter: unset;
 }
 
 /* Images and elements that need inversion back */
@@ -303,8 +309,14 @@ body.dark.theme-Rtmaterial #my-page tr.overdue td.id {
         color: var(--dark-pastel-double-invert) !important;
     }
 
+    /* Standalone SVGs (not inside .icon) need inversion */
     body svg.icon-svg {
-        stroke: var(--dark-pastel-double-invert) !important;
+        filter: invert(100%);
+    }
+
+    /* SVGs inside .icon - parent already has filter, don't double-invert */
+    body .icon svg.icon-svg {
+        filter: unset;
     }
 
     /* Images and elements that need inversion back */

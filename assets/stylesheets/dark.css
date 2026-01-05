@@ -86,6 +86,10 @@ body.dark #project-jump .drdn-trigger {
     background: transparent !important;
 }
 
+body.dark #top-menu {
+    background-color: transparent !important;
+}
+
 body.dark #header a,
 body.dark #top-menu a,
 body.dark #content h1,
@@ -318,6 +322,10 @@ body.dark.theme-Rtmaterial #my-page tr.overdue td.id {
     body #project-jump .drdn-trigger {
         color: var(--dark-pastel-single-invert);
         background: transparent !important;
+    }
+
+    body #top-menu {
+        background-color: transparent !important;
     }
 
     body #header a,

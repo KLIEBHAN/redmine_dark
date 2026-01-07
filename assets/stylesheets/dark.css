@@ -121,7 +121,7 @@ body.dark #main a.user {
 /* Add/New links - button style */
 body.dark a.icon-add {
     background-color: var(--dark-accent) !important;
-    color: var(--dark-text-inverted) !important;
+    color: var(--dark-text) !important;
     padding: 4px 8px;
     border-radius: 3px;
     text-decoration: none;
@@ -421,7 +421,7 @@ body.dark.theme-Rtmaterial #my-page tr.overdue td.id {
     /* Add/New links - button style */
     body a.icon-add {
         background-color: var(--dark-accent) !important;
-        color: var(--dark-text-inverted) !important;
+        color: var(--dark-text) !important;
         padding: 4px 8px;
         border-radius: 3px;
         text-decoration: none;

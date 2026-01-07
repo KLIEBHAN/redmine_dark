@@ -118,6 +118,19 @@ body.dark #main a.user {
     color: var(--dark-pastel-single-invert) !important;
 }
 
+/* Add/New links - button style */
+body.dark a.icon-add {
+    background-color: var(--dark-accent) !important;
+    color: var(--dark-text-inverted) !important;
+    padding: 4px 8px;
+    border-radius: 3px;
+    text-decoration: none;
+}
+
+body.dark a.icon-add:hover {
+    background-color: var(--dark-accent-secondary) !important;
+}
+
 /* Sidebar */
 body.dark #sidebar a.selected {
     background-color: unset !important;
@@ -403,6 +416,19 @@ body.dark.theme-Rtmaterial #my-page tr.overdue td.id {
     body .wiki a:visited,
     body #main a.user {
         color: var(--dark-pastel-single-invert) !important;
+    }
+
+    /* Add/New links - button style */
+    body a.icon-add {
+        background-color: var(--dark-accent) !important;
+        color: var(--dark-text-inverted) !important;
+        padding: 4px 8px;
+        border-radius: 3px;
+        text-decoration: none;
+    }
+
+    body a.icon-add:hover {
+        background-color: var(--dark-accent-secondary) !important;
     }
 
     /* Sidebar */

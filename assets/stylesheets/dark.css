@@ -67,7 +67,7 @@
          Für Elemente mit eigenem invert(100%) innerhalb des invertierten body.
          Mathematik: final = 25.5 + 0.9 × input (90% + 100% = ~10% Aufhellung) */
     --text-double-invert: #F6E4FF;   /* Wird zu hellem Lavendel */
-    --accent-double-invert: #CF7693; /* Wird zu Helles Rosa #D4849E */
+    --text-light-double-invert: #E3E3E3; /* Wird zu weißlich ~#E5E5E5 */
 }
 
 
@@ -125,7 +125,7 @@ body.dark:not(.theme-Rtmaterial) .icon {
    würden sonst doppelt invertiert (einmal durch .icon, einmal durch sich selbst) */
 body.dark svg.icon-svg {
     filter: invert(100%);
-    stroke: #E3E3E3 !important;  /* Wird weißlich nach Doppel-Inversion */
+    stroke: var(--text-light-double-invert) !important;  /* Wird weißlich nach Doppel-Inversion */
 }
 body.dark .icon svg.icon-svg {
     filter: unset;  /* Verhindert Doppel-Inversion */
@@ -397,7 +397,7 @@ body.dark.theme-Rtmaterial #my-page tr.overdue td.id {
     }
     body svg.icon-svg {
         filter: invert(100%);
-        stroke: #E3E3E3 !important;
+        stroke: var(--text-light-double-invert) !important;
     }
     body .icon svg.icon-svg {
         filter: unset;

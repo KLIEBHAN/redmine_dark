@@ -1,597 +1,619 @@
-/* ============================================
-   Deep Purple & Magenta Dark Mode
-   Fork: https://github.com/KLIEBHAN/redmine_dark
-   Original: https://github.com/fraoustin/redmine_dark
-   ============================================ */
+/*
+ * ==========================================================================
+ * REDMINE DARK MODE - Deep Purple & Magenta Theme
+ * ==========================================================================
+ *
+ * Funktionsweise:
+ * Der Dark Mode nutzt CSS filter:invert(90%) auf dem <body>, um alle Farben
+ * automatisch zu invertieren. Dies ist effizient, erfordert aber spezielle
+ * Behandlung für bestimmte Elemente (Bilder, Icons, bestimmte Farben).
+ *
+ * Zwei Aktivierungsmodi:
+ * 1. Manuell: Klick auf Toggle-Button fügt class="dark" zu body hinzu
+ * 2. Automatisch: @media (prefers-color-scheme: dark) für Systemeinstellung
+ *
+ * Repository: https://github.com/KLIEBHAN/redmine_dark
+ * Original: https://github.com/fraoustin/redmine_dark
+ */
 
-/* ============================================
-   CSS Custom Properties (Color Palette)
-   ============================================ */
+
+/* ==========================================================================
+   FARBPALETTE
+   ==========================================================================
+
+   Wichtig: Farben verhalten sich unterschiedlich je nach Kontext:
+
+   - DIREKT: Farbe wird direkt angezeigt (z.B. auf html, vor body-Filter)
+   - NACH INVERSION: Farbe durchläuft body's invert(90%)
+   - NACH DOPPEL-INVERSION: Farbe durchläuft invert(90%) + invert(100%)
+
+   Mathematik der 90%-Inversion:
+   angezeigte_farbe = 229.5 - (0.9 × gesetzte_farbe)
+
+   Um eine Zielfarbe zu erreichen:
+   zu_setzende_farbe = (229.5 - zielfarbe) / 0.9
+   ========================================================================== */
+
 :root {
-    /* Base colors */
-    --dark-bg: #1E1924;
-    --dark-bg-light: #2A2430;
+    /* --- Hintergrundfarben (direkt verwendet, vor Inversion) --- */
+    --bg-page: #1E1924;              /* Aubergine - Seitenhintergrund */
+    --bg-elevated: #2A2430;          /* Leicht heller - für Flyouts, Dropdowns */
 
-    /* Accent colors (as displayed after 90% inversion) */
-    --dark-accent: #C46B8C;
-    --dark-accent-secondary: #D4849E;
-    --dark-accent-light: #E09DB3;
+    /* --- Akzentfarben (finale Anzeigefarben) --- */
+    --accent-primary: #C46B8C;       /* Rosa - Hauptakzent */
+    --accent-secondary: #D4849E;     /* Helles Rosa - Hover, Sekundär */
+    --accent-tertiary: #E09DB3;      /* Noch heller - für Prioritäten */
 
-    /* Text colors */
-    --dark-text: #EAEAEA;
-    --dark-text-dark: #1E1924;
+    /* --- UI-Farben (für spezifische Elemente) --- */
+    --ui-hover-dark: #4A3545;        /* Dunkler Hover (z.B. Menü) */
+    --ui-hover-light: #F5F0F3;       /* Heller Hover (z.B. Tabellenzeilen) */
+    --ui-pagination: #9E4A6A;        /* Aktive Pagination */
+    --ui-header: #F5F5F5;            /* Header-Hintergrund */
 
-    /* UI colors */
-    --dark-hover: #4A3545;
-    --dark-hover-subtle: #F5F0F3;
-    --dark-pagination-active: #9E4A6A;
-    --dark-header-bg: #F5F5F5;
+    /* --- Text: Direkt verwendete Farben --- */
+    --text-light: #EAEAEA;           /* Heller Text */
+    --text-dark: #1E1924;            /* Dunkler Text */
 
-    /* Inversion-compensated colors:
-       Formula for 90% inversion: displayed = 229.5 - 0.9 * input
-       To get target color after inversion: input = (229.5 - target) / 0.9
-    */
-    --dark-accent-for-invert: #29996F;         /* displays as #C46B8C after 90% invert */
-    --dark-accent-secondary-for-invert: #1AAA6A; /* displays as #D4849E after 90% invert */
-    --dark-text-for-invert: #091B00;           /* displays as pastel lavender after 90% invert */
-    --dark-text-light-for-invert: #000000;     /* displays as ~#E5E5E5 (light) after 90% invert */
+    /* --- Text: Farben die durch Inversion gehen ---
+         Diese "seltsamen" Farben ergeben nach invert(90%) die gewünschten Farben */
+    --text-shows-light: #000000;     /* Wird zu ~#E5E5E5 (hellgrau) */
+    --text-shows-dark: #091B00;      /* Wird zu hellem Lavendel */
 
-    /* Double inversion (90% body + 100% element = ~10% net):
-       For elements with filter:invert(100%) inside inverted body
-    */
-    --dark-text-for-double-invert: #F6E4FF;
+    /* --- Akzent: Farben die durch Inversion gehen --- */
+    --accent-shows-primary: #29996F;    /* Wird zu #C46B8C (Rosa) */
+    --accent-shows-secondary: #1AAA6A;  /* Wird zu #D4849E (Helles Rosa) */
+
+    /* --- Spezialfall: Doppelte Inversion ---
+         Für Elemente mit eigenem invert(100%) innerhalb des invertierten body.
+         Mathematik: 90% + 100% ≈ leichte Aufhellung statt Invertierung */
+    --text-double-invert: #F6E4FF;   /* Wird zu hellem Lavendel */
 }
 
-/* ============================================
-   Dark Mode Toggle Button
-   ============================================ */
+
+/* ==========================================================================
+   DARK MODE TOGGLE (Schaltfläche im Header)
+   ========================================================================== */
+
 #dark {
     float: right;
-    color: var(--dark-text);
-    margin-right: 8px;
-    margin-left: 8px;
+    margin: 0 8px;
     font-weight: bold;
+    color: var(--text-light);
 }
 
-/* ============================================
-   Shared Dark Mode Styles
 
-   Note: Due to CSS limitations, styles must be duplicated
-   for body.dark (manual toggle) and @media (auto-detect).
-   Both sections should remain synchronized.
-   ============================================ */
+/* ==========================================================================
+   DARK MODE STYLES
+   ==========================================================================
 
-/* --- MANUAL DARK MODE (body.dark class) --- */
+   HINWEIS ZUR CODE-DUPLIKATION:
+   Die folgenden Styles existieren zweimal - einmal für body.dark (manueller
+   Toggle) und einmal für @media (prefers-color-scheme: dark) (automatisch).
+
+   Diese Duplikation ist in reinem CSS unvermeidbar, da:
+   - body.dark erfordert den Selektor "body.dark element"
+   - @media erfordert den Selektor "body element" innerhalb des Media-Blocks
+
+   Bei Änderungen BEIDE Sektionen synchron halten!
+   ========================================================================== */
+
+
+/* --------------------------------------------------------------------------
+   MANUELLER DARK MODE (aktiviert via JavaScript Toggle)
+   -------------------------------------------------------------------------- */
 
 html.dark {
-    background-color: var(--dark-bg);
+    background-color: var(--bg-page);
 }
 
 body.dark {
+    /* Kernmechanismus: Invertiert 90% aller Farben automatisch */
     filter: invert(90%);
 }
 
-/* Icons - compensate for body inversion */
+/* --- Inversion-Kompensation für Icons ---
+   Icons haben eigene Farben die durch body-Inversion falsch werden.
+   Lösung: Gegen-Inversion mit 100% stellt ursprüngliche Farben wieder her. */
 body.dark:not(.theme-Rtmaterial) .icon {
     filter: invert(100%);
-    color: var(--dark-text-for-double-invert) !important;
+    color: var(--text-double-invert) !important;
 }
 
-/* SVGs - standalone need inversion, nested don't */
+/* --- SVG-Icons: Kontextabhängige Behandlung ---
+   Standalone-SVGs brauchen Inversion, aber SVGs INNERHALB von .icon-Elementen
+   würden sonst doppelt invertiert (einmal durch .icon, einmal durch sich selbst) */
 body.dark svg.icon-svg {
     filter: invert(100%);
 }
-
 body.dark .icon svg.icon-svg {
-    filter: unset;
+    filter: unset;  /* Verhindert Doppel-Inversion */
 }
 
-/* Images - restore original colors */
+/* --- Bilder und Grafiken ---
+   Diese Elemente sollen ihre Originalfarben behalten, daher Gegen-Inversion */
 body.dark .badge,
 body.dark img.gravatar,
 body.dark img.filecontent.image,
 body.dark .wiki img,
 body.dark .attachments .images img,
 body.dark table.indicator.summary,
-body.dark canvas.chartjs-render-monitor {
-    filter: invert(100%);
-}
-
+body.dark canvas.chartjs-render-monitor,
 body.dark .diff_out,
 body.dark .diff_in {
     filter: invert(100%);
 }
 
-/* Overdue styling */
+/* --- Überfällige Tickets: Visuelle Hervorhebung --- */
 body.dark table.list tr.overdue td.due_date,
 body.dark div.issue.overdue .due-date .value {
     filter: invert(100%);
-    color: var(--dark-accent-secondary);
+    color: var(--accent-secondary);
 }
 
-/* Header & Top Menu */
+/* --- Header-Bereich: Transparenter Hintergrund für cleanes Design --- */
 body.dark #header,
 body.dark #top-menu,
 body.dark #project-jump .drdn-trigger {
-    color: var(--dark-text-for-invert) !important;
     background: transparent !important;
+    color: var(--text-shows-dark) !important;
 }
 
 body.dark #top-menu #loggedas {
-    color: var(--dark-text-for-invert) !important;
+    color: var(--text-shows-dark) !important;
 }
 
+/* --- Überschriften und wichtige Links: Einheitliche dunkle Textfarbe --- */
 body.dark #header a,
 body.dark #top-menu a,
 body.dark #content h1,
-body.dark h2,
-body.dark h3,
-body.dark h4,
-body.dark h5,
-body.dark h6,
+body.dark h2, body.dark h3, body.dark h4, body.dark h5, body.dark h6,
 body.dark #main a.user {
-    color: var(--dark-text-for-invert) !important;
+    color: var(--text-shows-dark) !important;
 }
 
-/* Content links - accent color for visibility */
+/* --- Content-Links: Rosa Akzentfarbe für bessere Sichtbarkeit ---
+   Standard-Linkfarbe würde nach Inversion schlecht lesbar sein */
 body.dark #content a,
 body.dark #content a:link,
 body.dark #content a:visited {
-    color: var(--dark-accent-for-invert) !important;
+    color: var(--accent-shows-primary) !important;
 }
-
 body.dark #content a:hover,
 body.dark #content a:focus {
-    color: var(--dark-accent-secondary-for-invert) !important;
+    color: var(--accent-shows-secondary) !important;
 }
 
-/* Issue links - override content links for specific styling */
+/* Issue-Links: Gleiche Farbe wie andere Content-Links */
 body.dark #content a.issue,
 body.dark #content a.issue:link,
 body.dark #content a.issue:visited {
-    color: var(--dark-accent-for-invert) !important;
+    color: var(--accent-shows-primary) !important;
 }
 
-/* Wiki links */
+/* Wiki-Links: Dunkle Farbe wie Überschriften für Konsistenz */
 body.dark .wiki a,
 body.dark .wiki a:link,
 body.dark .wiki a:visited {
-    color: var(--dark-text-for-invert) !important;
+    color: var(--text-shows-dark) !important;
 }
 
-/* Buttons - consistent styling for all button types */
+/* --- Buttons: Einheitliches Design für alle Button-Typen ---
+   Sowohl <input type="submit"> als auch Link-Buttons (.icon-add) */
 body.dark input[type="submit"],
 body.dark #content a.icon-add,
 body.dark #content a.icon-add:link,
 body.dark #content a.icon-add:visited {
-    background-color: var(--dark-accent) !important;
-    color: var(--dark-text-light-for-invert) !important;
-    border: 1px solid var(--dark-accent) !important;
-    filter: unset !important;
+    background-color: var(--accent-primary) !important;
+    color: var(--text-shows-light) !important;  /* Schwarz → wird hellgrau */
+    border: 1px solid var(--accent-primary) !important;
+    filter: unset !important;  /* Verhindert Icon-Filter auf Buttons */
     padding: 4px 8px;
     border-radius: 3px;
     text-decoration: none;
 }
-
 body.dark input[type="submit"]:hover,
 body.dark #content a.icon-add:hover {
-    background-color: var(--dark-accent-secondary) !important;
-    border-color: var(--dark-accent-secondary) !important;
+    background-color: var(--accent-secondary) !important;
+    border-color: var(--accent-secondary) !important;
 }
 
-/* Sidebar */
+/* --- Sidebar --- */
 body.dark #sidebar a.selected {
     background-color: unset !important;
-    color: var(--dark-text-dark);
+    color: var(--text-dark);
 }
 
-/* Login form */
-body.dark #login-form {
+/* --- Formulare: Entferne störende Hintergründe --- */
+body.dark #login-form,
+body.dark .nodata {
     background: unset !important;
     border: unset !important;
 }
 
-body.dark .nodata {
-    background: unset !important;
-}
-
-/* Form inputs */
+/* --- Form-Inputs: Akzentfarbe für Checkboxen etc. --- */
 body.dark input {
-    accent-color: var(--dark-accent) !important;
+    accent-color: var(--accent-primary) !important;
 }
-
 body.dark input[type="date"] {
     color-scheme: dark;
 }
-
 body.dark input[type="date"]::-webkit-calendar-picker-indicator {
     filter: invert(100%);
 }
 
-/* Issue detail */
+/* --- Issue-Detailseite --- */
 body.dark div.issue {
     background: transparent !important;
 }
 
-/* Flyout menu */
+/* --- Flyout-Menüs und Dropdowns --- */
 body.dark .flyout-menu {
-    background-color: var(--dark-bg-light);
+    background-color: var(--bg-elevated);
 }
 
-/* Flash notice */
+/* --- Flash-Nachrichten --- */
 body.dark div.flash.notice {
     background-color: transparent !important;
-    border-color: var(--dark-accent) !important;
+    border-color: var(--accent-primary) !important;
 }
 
-/* Table row hover */
+/* --- Hover-Effekte für Tabellen und Listen --- */
 body.dark table.list:not(.odd-even) tbody tr:hover,
 body.dark .odd:hover,
 body.dark .even:hover,
 body.dark #issue-changesets div.changeset:hover {
-    background-color: var(--dark-hover-subtle);
+    background-color: var(--ui-hover-light);
 }
 
-/* Menu hover */
-body.dark #main-menu .menu-children li a:hover,
-body.dark .pagination ul.pages li.page:hover {
-    background-color: var(--dark-hover);
-}
-
-/* Main menu */
+/* --- Hauptmenü --- */
 body.dark #main-menu,
 body.dark #main-menu li a,
 body.dark #main-menu li a.selected,
 body.dark #main-menu li a:hover,
+body.dark #main-menu .menu-children li a:hover {
+    color: var(--text-dark);
+    background: var(--ui-header);
+}
+body.dark #main-menu li a.new-object {
+    background: var(--ui-header);
+}
+body.dark #main-menu .menu-children li a:hover,
+body.dark .pagination ul.pages li.page:hover {
+    background-color: var(--ui-hover-dark);
+}
+body.dark #main-menu li a.selected,
+body.dark .ui-widget-header,
+body.dark #main-menu .menu-children {
+    border-color: var(--accent-primary) !important;
+}
+
+/* --- Warnungen und Fehler --- */
 body.dark .nodata,
 body.dark .warning,
 body.dark #errorExplanation,
 body.dark #flash_error,
 body.dark div.flash.notice,
-body.dark #main-menu .menu-children li a:hover,
 body.dark .highlight {
-    color: var(--dark-text-dark);
+    color: var(--text-dark);
 }
 
-body.dark #main-menu,
-body.dark #main-menu li a.selected,
-body.dark #main-menu li a:hover,
-body.dark #main-menu li a.new-object {
-    background: var(--dark-header-bg);
-}
-
-body.dark #main-menu li a.selected,
-body.dark .ui-widget-header,
-body.dark #main-menu .menu-children {
-    border-color: var(--dark-accent) !important;
-}
-
-/* Tabs */
+/* --- Tabs: Aktiver Tab mit Akzent-Unterstrich --- */
 body.dark #content .tabs ul li a {
     border-bottom: 3px solid transparent;
 }
-
 body.dark #content .tabs ul li a.selected {
-    border-bottom: 3px solid var(--dark-accent) !important;
+    border-bottom: 3px solid var(--accent-primary) !important;
     background: transparent !important;
 }
-
 body.dark #content .tabs ul li a:hover {
-    border-bottom: 3px solid var(--dark-accent-secondary) !important;
+    border-bottom: 3px solid var(--accent-secondary) !important;
 }
 
-/* Pagination */
+/* --- Pagination --- */
 body.dark .pagination ul.pages li:first-child {
     border-top-left-radius: 4px;
     border-bottom-left-radius: 4px;
 }
-
 body.dark .pagination ul.pages li {
-    border: 1px solid var(--dark-hover);
+    border: 1px solid var(--ui-hover-dark);
 }
-
 body.dark .pagination ul.pages li.current {
-    color: var(--dark-text);
-    background-color: var(--dark-pagination-active);
-    border-color: var(--dark-pagination-active);
+    color: var(--text-light);
+    background-color: var(--ui-pagination);
+    border-color: var(--ui-pagination);
 }
 
-/* Select dropdowns */
+/* --- Select-Dropdowns --- */
 body.dark select option,
 body.dark select optgroup {
-    color: var(--dark-text);
-    background-color: var(--dark-bg);
+    color: var(--text-light);
+    background-color: var(--bg-page);
 }
 
-/* Progress bar */
+/* --- Progress-Bar: Akzentfarben für Fortschritt --- */
 body.dark table.progress td.closed {
-    background-color: var(--dark-accent) !important;
+    background-color: var(--accent-primary) !important;
 }
-
 body.dark table.progress td.done {
-    background-color: var(--dark-accent-secondary) !important;
+    background-color: var(--accent-secondary) !important;
 }
 
-/* Activity & Search links */
+/* --- Activity und Suche --- */
 body.dark #activity dt a,
 body.dark #search-results dt a {
-    color: var(--dark-text);
+    color: var(--text-light);
 }
 
-/* RTmaterial theme support */
+/* --- RTmaterial Theme Kompatibilität --- */
 body.dark.theme-Rtmaterial tr.priority-default td.priority {
-    border-color: var(--dark-accent-secondary);
+    border-color: var(--accent-secondary);
 }
-
 body.dark.theme-Rtmaterial tr.priority-lowest td.priority {
-    border-color: var(--dark-accent);
+    border-color: var(--accent-primary);
 }
-
 body.dark.theme-Rtmaterial tr.priority-highest td.priority {
-    border-color: var(--dark-accent-light);
+    border-color: var(--accent-tertiary);
 }
-
 body.dark.theme-Rtmaterial tr.overdue td:first-child,
 body.dark.theme-Rtmaterial #my-page tr.overdue td.id {
-    border-left: 3px solid var(--dark-accent-secondary) !important;
+    border-left: 3px solid var(--accent-secondary) !important;
 }
 
-/* ============================================
-   AUTO DARK MODE (@media prefers-color-scheme)
 
-   Mirrors body.dark styles for system preference
-   ============================================ */
+/* --------------------------------------------------------------------------
+   AUTOMATISCHER DARK MODE (via Systemeinstellung)
+   --------------------------------------------------------------------------
+   Identisch zu body.dark, aber aktiviert durch OS-Präferenz.
+   Bei Änderungen BEIDE Sektionen synchron halten!
+   -------------------------------------------------------------------------- */
+
 @media (prefers-color-scheme: dark) {
+    /* Toggle-Button verstecken wenn System-Dark-Mode aktiv */
     #dark {
         display: none;
     }
 
     html {
-        background-color: var(--dark-bg);
+        background-color: var(--bg-page);
     }
 
     body {
         filter: invert(90%);
     }
 
+    /* Icons */
     body:not(.theme-Rtmaterial) .icon {
         filter: invert(100%);
-        color: var(--dark-text-for-double-invert) !important;
+        color: var(--text-double-invert) !important;
     }
-
     body svg.icon-svg {
         filter: invert(100%);
     }
-
     body .icon svg.icon-svg {
         filter: unset;
     }
 
+    /* Bilder */
     body .badge,
     body img.gravatar,
     body img.filecontent.image,
     body .wiki img,
     body .attachments .images img,
     body table.indicator.summary,
-    body canvas.chartjs-render-monitor {
-        filter: invert(100%);
-    }
-
+    body canvas.chartjs-render-monitor,
     body .diff_out,
     body .diff_in {
         filter: invert(100%);
     }
 
+    /* Überfällige Tickets */
     body table.list tr.overdue td.due_date,
     body div.issue.overdue .due-date .value {
         filter: invert(100%);
-        color: var(--dark-accent-secondary);
+        color: var(--accent-secondary);
     }
 
+    /* Header */
     body #header,
     body #top-menu,
     body #project-jump .drdn-trigger {
-        color: var(--dark-text-for-invert) !important;
         background: transparent !important;
+        color: var(--text-shows-dark) !important;
     }
-
     body #top-menu #loggedas {
-        color: var(--dark-text-for-invert) !important;
+        color: var(--text-shows-dark) !important;
     }
 
+    /* Überschriften */
     body #header a,
     body #top-menu a,
     body #content h1,
-    body h2,
-    body h3,
-    body h4,
-    body h5,
-    body h6,
+    body h2, body h3, body h4, body h5, body h6,
     body #main a.user {
-        color: var(--dark-text-for-invert) !important;
+        color: var(--text-shows-dark) !important;
     }
 
+    /* Content-Links */
     body #content a,
     body #content a:link,
     body #content a:visited {
-        color: var(--dark-accent-for-invert) !important;
+        color: var(--accent-shows-primary) !important;
     }
-
     body #content a:hover,
     body #content a:focus {
-        color: var(--dark-accent-secondary-for-invert) !important;
+        color: var(--accent-shows-secondary) !important;
     }
-
     body #content a.issue,
     body #content a.issue:link,
     body #content a.issue:visited {
-        color: var(--dark-accent-for-invert) !important;
+        color: var(--accent-shows-primary) !important;
     }
 
+    /* Wiki-Links */
     body .wiki a,
     body .wiki a:link,
     body .wiki a:visited {
-        color: var(--dark-text-for-invert) !important;
+        color: var(--text-shows-dark) !important;
     }
 
+    /* Buttons */
     body input[type="submit"],
     body #content a.icon-add,
     body #content a.icon-add:link,
     body #content a.icon-add:visited {
-        background-color: var(--dark-accent) !important;
-        color: var(--dark-text-light-for-invert) !important;
-        border: 1px solid var(--dark-accent) !important;
+        background-color: var(--accent-primary) !important;
+        color: var(--text-shows-light) !important;
+        border: 1px solid var(--accent-primary) !important;
         filter: unset !important;
         padding: 4px 8px;
         border-radius: 3px;
         text-decoration: none;
     }
-
     body input[type="submit"]:hover,
     body #content a.icon-add:hover {
-        background-color: var(--dark-accent-secondary) !important;
-        border-color: var(--dark-accent-secondary) !important;
+        background-color: var(--accent-secondary) !important;
+        border-color: var(--accent-secondary) !important;
     }
 
+    /* Sidebar */
     body #sidebar a.selected {
         background-color: unset !important;
-        color: var(--dark-text-dark);
+        color: var(--text-dark);
     }
 
-    body #login-form {
+    /* Formulare */
+    body #login-form,
+    body .nodata {
         background: unset !important;
         border: unset !important;
     }
 
-    body .nodata {
-        background: unset !important;
-    }
-
+    /* Inputs */
     body input {
-        accent-color: var(--dark-accent) !important;
+        accent-color: var(--accent-primary) !important;
     }
-
     body input[type="date"] {
         color-scheme: dark;
     }
-
     body input[type="date"]::-webkit-calendar-picker-indicator {
         filter: invert(100%);
     }
 
+    /* Issue-Detail */
     body div.issue {
         background: transparent !important;
     }
 
+    /* Flyout */
     body .flyout-menu {
-        background-color: var(--dark-bg-light);
+        background-color: var(--bg-elevated);
     }
 
+    /* Flash */
     body div.flash.notice {
         background-color: transparent !important;
-        border-color: var(--dark-accent) !important;
+        border-color: var(--accent-primary) !important;
     }
 
+    /* Hover */
     body table.list:not(.odd-even) tbody tr:hover,
     body .odd:hover,
     body .even:hover,
     body #issue-changesets div.changeset:hover {
-        background-color: var(--dark-hover-subtle);
+        background-color: var(--ui-hover-light);
     }
 
-    body #main-menu .menu-children li a:hover,
-    body .pagination ul.pages li.page:hover {
-        background-color: var(--dark-hover);
-    }
-
+    /* Hauptmenü */
     body #main-menu,
     body #main-menu li a,
     body #main-menu li a.selected,
     body #main-menu li a:hover,
+    body #main-menu .menu-children li a:hover {
+        color: var(--text-dark);
+        background: var(--ui-header);
+    }
+    body #main-menu li a.new-object {
+        background: var(--ui-header);
+    }
+    body #main-menu .menu-children li a:hover,
+    body .pagination ul.pages li.page:hover {
+        background-color: var(--ui-hover-dark);
+    }
+    body #main-menu li a.selected,
+    body .ui-widget-header,
+    body #main-menu .menu-children {
+        border-color: var(--accent-primary) !important;
+    }
+
+    /* Warnungen */
     body .nodata,
     body .warning,
     body #errorExplanation,
     body #flash_error,
     body div.flash.notice,
-    body #main-menu .menu-children li a:hover,
     body .highlight {
-        color: var(--dark-text-dark);
+        color: var(--text-dark);
     }
 
-    body #main-menu,
-    body #main-menu li a.selected,
-    body #main-menu li a:hover,
-    body #main-menu li a.new-object {
-        background: var(--dark-header-bg);
-    }
-
-    body #main-menu li a.selected,
-    body .ui-widget-header,
-    body #main-menu .menu-children {
-        border-color: var(--dark-accent) !important;
-    }
-
+    /* Tabs */
     body #content .tabs ul li a {
         border-bottom: 3px solid transparent;
     }
-
     body #content .tabs ul li a.selected {
-        border-bottom: 3px solid var(--dark-accent) !important;
+        border-bottom: 3px solid var(--accent-primary) !important;
         background: transparent !important;
     }
-
     body #content .tabs ul li a:hover {
-        border-bottom: 3px solid var(--dark-accent-secondary) !important;
+        border-bottom: 3px solid var(--accent-secondary) !important;
     }
 
+    /* Pagination */
     body .pagination ul.pages li:first-child {
         border-top-left-radius: 4px;
         border-bottom-left-radius: 4px;
     }
-
     body .pagination ul.pages li {
-        border: 1px solid var(--dark-hover);
+        border: 1px solid var(--ui-hover-dark);
     }
-
     body .pagination ul.pages li.current {
-        color: var(--dark-text);
-        background-color: var(--dark-pagination-active);
-        border-color: var(--dark-pagination-active);
+        color: var(--text-light);
+        background-color: var(--ui-pagination);
+        border-color: var(--ui-pagination);
     }
 
+    /* Dropdowns */
     body select option,
     body select optgroup {
-        color: var(--dark-text);
-        background-color: var(--dark-bg);
+        color: var(--text-light);
+        background-color: var(--bg-page);
     }
 
+    /* Progress */
     body table.progress td.closed {
-        background-color: var(--dark-accent) !important;
+        background-color: var(--accent-primary) !important;
     }
-
     body table.progress td.done {
-        background-color: var(--dark-accent-secondary) !important;
+        background-color: var(--accent-secondary) !important;
     }
 
+    /* Activity */
     body #activity dt a,
     body #search-results dt a {
-        color: var(--dark-text);
+        color: var(--text-light);
     }
 
+    /* RTmaterial */
     body.theme-Rtmaterial tr.priority-default td.priority {
-        border-color: var(--dark-accent-secondary);
+        border-color: var(--accent-secondary);
     }
-
     body.theme-Rtmaterial tr.priority-lowest td.priority {
-        border-color: var(--dark-accent);
+        border-color: var(--accent-primary);
     }
-
     body.theme-Rtmaterial tr.priority-highest td.priority {
-        border-color: var(--dark-accent-light);
+        border-color: var(--accent-tertiary);
     }
-
     body.theme-Rtmaterial tr.overdue td:first-child,
     body.theme-Rtmaterial #my-page tr.overdue td.id {
-        border-left: 3px solid var(--dark-accent-secondary) !important;
+        border-left: 3px solid var(--accent-secondary) !important;
     }
 }

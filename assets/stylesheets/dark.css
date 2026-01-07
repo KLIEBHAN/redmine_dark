@@ -34,6 +34,7 @@
     --dark-accent-for-invert: #29996F;         /* displays as #C46B8C after 90% invert */
     --dark-accent-secondary-for-invert: #1AAA6A; /* displays as #D4849E after 90% invert */
     --dark-text-for-invert: #091B00;           /* displays as pastel lavender after 90% invert */
+    --dark-text-light-for-invert: #000000;     /* displays as ~#E5E5E5 (light) after 90% invert */
 
     /* Double inversion (90% body + 100% element = ~10% net):
        For elements with filter:invert(100%) inside inverted body
@@ -164,7 +165,7 @@ body.dark #content a.icon-add,
 body.dark #content a.icon-add:link,
 body.dark #content a.icon-add:visited {
     background-color: var(--dark-accent) !important;
-    color: var(--dark-text) !important;
+    color: var(--dark-text-light-for-invert) !important;
     border: 1px solid var(--dark-accent) !important;
     filter: unset !important;
     padding: 4px 8px;
@@ -438,7 +439,7 @@ body.dark.theme-Rtmaterial #my-page tr.overdue td.id {
     body #content a.icon-add:link,
     body #content a.icon-add:visited {
         background-color: var(--dark-accent) !important;
-        color: var(--dark-text) !important;
+        color: var(--dark-text-light-for-invert) !important;
         border: 1px solid var(--dark-accent) !important;
         filter: unset !important;
         padding: 4px 8px;

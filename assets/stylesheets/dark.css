@@ -67,7 +67,7 @@
          Für Elemente mit eigenem invert(100%) innerhalb des invertierten body.
          Mathematik: final = 25.5 + 0.9 × input (90% + 100% = ~10% Aufhellung) */
     --text-double-invert: #F6E4FF;   /* Wird zu hellem Lavendel */
-    --accent-double-invert: #BD5B7F; /* Wird zu Rosa #C46B8C */
+    --accent-double-invert: #CF7693; /* Wird zu Helles Rosa #D4849E */
 }
 
 
@@ -129,7 +129,7 @@ body.dark svg.icon-svg {
 }
 body.dark .icon svg.icon-svg {
     filter: unset;  /* Verhindert Doppel-Inversion */
-    stroke: var(--accent-shows-primary) !important;  /* Rosa nach einfacher 90%-Inversion */
+    stroke: var(--accent-shows-secondary) !important;  /* Helles Rosa nach 90%-Inversion */
 }
 
 /* --- Bilder und Grafiken ---
@@ -401,7 +401,7 @@ body.dark.theme-Rtmaterial #my-page tr.overdue td.id {
     }
     body .icon svg.icon-svg {
         filter: unset;
-        stroke: var(--accent-shows-primary) !important;
+        stroke: var(--accent-shows-secondary) !important;
     }
 
     /* Bilder */

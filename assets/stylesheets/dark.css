@@ -21,6 +21,9 @@
     /* Colors for inversion compensation */
     --dark-pastel-single-invert: #091B00;
     --dark-pastel-double-invert: #F6E4FF;
+    /* Accent colors for 90% inversion */
+    --dark-accent-inverted: #29996F;
+    --dark-accent-secondary-inverted: #1AAA6A;
 }
 
 /* ============================================
@@ -194,6 +197,18 @@ body.dark .pagination ul.pages li.page:hover {
     background-color: var(--dark-hover);
 }
 
+/* Content links - accent color for visibility */
+body.dark #content a,
+body.dark #content a:link,
+body.dark #content a:visited {
+    color: var(--dark-accent-inverted) !important;
+}
+
+body.dark #content a:hover,
+body.dark #content a:focus {
+    color: var(--dark-accent-secondary-inverted) !important;
+}
+
 /* General text colors */
 body.dark #main-menu,
 body.dark #main-menu li a,
@@ -203,11 +218,6 @@ body.dark .nodata,
 body.dark .warning,
 body.dark #errorExplanation,
 body.dark #flash_error,
-body.dark a,
-body.dark a:link,
-body.dark a:visited,
-body.dark a:hover,
-body.dark a:focus,
 body.dark div.flash.notice,
 body.dark #main-menu .menu-children li a:hover,
 body.dark .highlight {
@@ -222,9 +232,22 @@ body.dark #main-menu li a.new-object {
     background: var(--dark-header-bg);
 }
 
+/* Tab styling - accent underline for active tab */
+body.dark #content .tabs ul li a.selected {
+    border-bottom: 3px solid var(--dark-accent) !important;
+    background: transparent !important;
+}
+
+body.dark #content .tabs ul li a {
+    border-bottom: 3px solid transparent;
+}
+
+body.dark #content .tabs ul li a:hover {
+    border-bottom: 3px solid var(--dark-accent-secondary) !important;
+}
+
 /* Border colors */
 body.dark #main-menu li a.selected,
-body.dark #content .tabs ul li a.selected,
 body.dark input[type="submit"],
 body.dark input[type="submit"]:hover,
 body.dark div.flash.notice,
@@ -254,6 +277,16 @@ body.dark select option,
 body.dark select optgroup {
     color: var(--dark-text);
     background-color: var(--dark-bg);
+}
+
+/* Section separators - subtle dividing lines */
+body.dark div.issue .description,
+body.dark div.issue #issue_tree,
+body.dark div.issue .related-issues,
+body.dark div.issue #history {
+    border-top: 1px solid var(--dark-hover);
+    padding-top: 15px;
+    margin-top: 15px;
 }
 
 /* Activity links */
@@ -452,6 +485,18 @@ body.dark.theme-Rtmaterial #my-page tr.overdue td.id {
         background-color: var(--dark-hover);
     }
 
+    /* Content links - accent color for visibility */
+    body #content a,
+    body #content a:link,
+    body #content a:visited {
+        color: var(--dark-accent-inverted) !important;
+    }
+
+    body #content a:hover,
+    body #content a:focus {
+        color: var(--dark-accent-secondary-inverted) !important;
+    }
+
     /* General text colors */
     body #main-menu,
     body #main-menu li a,
@@ -461,11 +506,6 @@ body.dark.theme-Rtmaterial #my-page tr.overdue td.id {
     body .warning,
     body #errorExplanation,
     body #flash_error,
-    body a,
-    body a:link,
-    body a:visited,
-    body a:hover,
-    body a:focus,
     body div.flash.notice,
     body #main-menu .menu-children li a:hover,
     body .highlight {
@@ -480,9 +520,22 @@ body.dark.theme-Rtmaterial #my-page tr.overdue td.id {
         background: var(--dark-header-bg);
     }
 
+    /* Tab styling - accent underline for active tab */
+    body #content .tabs ul li a.selected {
+        border-bottom: 3px solid var(--dark-accent) !important;
+        background: transparent !important;
+    }
+
+    body #content .tabs ul li a {
+        border-bottom: 3px solid transparent;
+    }
+
+    body #content .tabs ul li a:hover {
+        border-bottom: 3px solid var(--dark-accent-secondary) !important;
+    }
+
     /* Border colors */
     body #main-menu li a.selected,
-    body #content .tabs ul li a.selected,
     body input[type="submit"],
     body input[type="submit"]:hover,
     body div.flash.notice,
@@ -512,6 +565,16 @@ body.dark.theme-Rtmaterial #my-page tr.overdue td.id {
     body select optgroup {
         color: var(--dark-text);
         background-color: var(--dark-bg);
+    }
+
+    /* Section separators - subtle dividing lines */
+    body div.issue .description,
+    body div.issue #issue_tree,
+    body div.issue .related-issues,
+    body div.issue #history {
+        border-top: 1px solid var(--dark-hover);
+        padding-top: 15px;
+        margin-top: 15px;
     }
 
     /* Activity links */

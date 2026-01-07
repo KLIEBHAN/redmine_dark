@@ -1,29 +1,44 @@
-/* Deep Purple & Magenta Dark Mode
- * Fork: https://github.com/KLIEBHAN/redmine_dark
- * Original: https://github.com/fraoustin/redmine_dark
- */
+/* ============================================
+   Deep Purple & Magenta Dark Mode
+   Fork: https://github.com/KLIEBHAN/redmine_dark
+   Original: https://github.com/fraoustin/redmine_dark
+   ============================================ */
 
 /* ============================================
    CSS Custom Properties (Color Palette)
    ============================================ */
 :root {
+    /* Base colors */
     --dark-bg: #1E1924;
     --dark-bg-light: #2A2430;
+
+    /* Accent colors (as displayed after 90% inversion) */
     --dark-accent: #C46B8C;
     --dark-accent-secondary: #D4849E;
     --dark-accent-light: #E09DB3;
+
+    /* Text colors */
     --dark-text: #EAEAEA;
-    --dark-text-inverted: #1E1924;
+    --dark-text-dark: #1E1924;
+
+    /* UI colors */
     --dark-hover: #4A3545;
     --dark-hover-subtle: #F5F0F3;
     --dark-pagination-active: #9E4A6A;
     --dark-header-bg: #F5F5F5;
-    /* Colors for inversion compensation */
-    --dark-pastel-single-invert: #091B00;
-    --dark-pastel-double-invert: #F6E4FF;
-    /* Accent colors for 90% inversion */
-    --dark-accent-inverted: #29996F;
-    --dark-accent-secondary-inverted: #1AAA6A;
+
+    /* Inversion-compensated colors:
+       Formula for 90% inversion: displayed = 229.5 - 0.9 * input
+       To get target color after inversion: input = (229.5 - target) / 0.9
+    */
+    --dark-accent-for-invert: #29996F;         /* displays as #C46B8C after 90% invert */
+    --dark-accent-secondary-for-invert: #1AAA6A; /* displays as #D4849E after 90% invert */
+    --dark-text-for-invert: #091B00;           /* displays as pastel lavender after 90% invert */
+
+    /* Double inversion (90% body + 100% element = ~10% net):
+       For elements with filter:invert(100%) inside inverted body
+    */
+    --dark-text-for-double-invert: #F6E4FF;
 }
 
 /* ============================================
@@ -38,8 +53,15 @@
 }
 
 /* ============================================
-   Manual Dark Mode (body.dark class)
+   Shared Dark Mode Styles
+
+   Note: Due to CSS limitations, styles must be duplicated
+   for body.dark (manual toggle) and @media (auto-detect).
+   Both sections should remain synchronized.
    ============================================ */
+
+/* --- MANUAL DARK MODE (body.dark class) --- */
+
 html.dark {
     background-color: var(--dark-bg);
 }
@@ -48,23 +70,22 @@ body.dark {
     filter: invert(90%);
 }
 
-/* Icons - double inversion compensation */
+/* Icons - compensate for body inversion */
 body.dark:not(.theme-Rtmaterial) .icon {
     filter: invert(100%);
-    color: var(--dark-pastel-double-invert) !important;
+    color: var(--dark-text-for-double-invert) !important;
 }
 
-/* Standalone SVGs (not inside .icon) need inversion */
+/* SVGs - standalone need inversion, nested don't */
 body.dark svg.icon-svg {
     filter: invert(100%);
 }
 
-/* SVGs inside .icon - parent already has filter, don't double-invert */
 body.dark .icon svg.icon-svg {
     filter: unset;
 }
 
-/* Images and elements that need inversion back */
+/* Images - restore original colors */
 body.dark .badge,
 body.dark img.gravatar,
 body.dark img.filecontent.image,
@@ -77,7 +98,7 @@ body.dark canvas.chartjs-render-monitor {
 
 body.dark .diff_out,
 body.dark .diff_in {
-    filter: invert(1);
+    filter: invert(100%);
 }
 
 /* Overdue styling */
@@ -87,20 +108,16 @@ body.dark div.issue.overdue .due-date .value {
     color: var(--dark-accent-secondary);
 }
 
-/* Header and Top Menu */
+/* Header & Top Menu */
 body.dark #header,
 body.dark #top-menu,
 body.dark #project-jump .drdn-trigger {
-    color: var(--dark-pastel-single-invert) !important;
+    color: var(--dark-text-for-invert) !important;
     background: transparent !important;
 }
 
-body.dark #top-menu {
-    background-color: transparent !important;
-}
-
 body.dark #top-menu #loggedas {
-    color: var(--dark-pastel-single-invert) !important;
+    color: var(--dark-text-for-invert) !important;
 }
 
 body.dark #header a,
@@ -111,34 +128,60 @@ body.dark h3,
 body.dark h4,
 body.dark h5,
 body.dark h6,
-body.dark .wiki a,
-body.dark .wiki a:link,
-body.dark .wiki a:visited,
 body.dark #main a.user {
-    color: var(--dark-pastel-single-invert) !important;
+    color: var(--dark-text-for-invert) !important;
 }
 
-/* Add/New links - button style */
+/* Content links - accent color for visibility */
+body.dark #content a,
+body.dark #content a:link,
+body.dark #content a:visited {
+    color: var(--dark-accent-for-invert) !important;
+}
+
+body.dark #content a:hover,
+body.dark #content a:focus {
+    color: var(--dark-accent-secondary-for-invert) !important;
+}
+
+/* Issue links - override content links for specific styling */
+body.dark #content a.issue,
+body.dark #content a.issue:link,
+body.dark #content a.issue:visited {
+    color: var(--dark-accent-for-invert) !important;
+}
+
+/* Wiki links */
+body.dark .wiki a,
+body.dark .wiki a:link,
+body.dark .wiki a:visited {
+    color: var(--dark-text-for-invert) !important;
+}
+
+/* Buttons - consistent styling for all button types */
+body.dark input[type="submit"],
 body.dark #content a.icon-add,
 body.dark #content a.icon-add:link,
-body.dark #content a.icon-add:visited,
-body.dark #content a.icon-add:hover {
+body.dark #content a.icon-add:visited {
     background-color: var(--dark-accent) !important;
     color: var(--dark-text) !important;
+    border: 1px solid var(--dark-accent) !important;
     filter: unset !important;
     padding: 4px 8px;
     border-radius: 3px;
     text-decoration: none;
 }
 
+body.dark input[type="submit"]:hover,
 body.dark #content a.icon-add:hover {
     background-color: var(--dark-accent-secondary) !important;
+    border-color: var(--dark-accent-secondary) !important;
 }
 
 /* Sidebar */
 body.dark #sidebar a.selected {
     background-color: unset !important;
-    color: var(--dark-text-inverted);
+    color: var(--dark-text-dark);
 }
 
 /* Login form */
@@ -164,17 +207,9 @@ body.dark input[type="date"]::-webkit-calendar-picker-indicator {
     filter: invert(100%);
 }
 
-/* Issue styling */
+/* Issue detail */
 body.dark div.issue {
     background: transparent !important;
-}
-
-body.dark a.issue,
-body.dark a.issue:link,
-body.dark a.issue:visited,
-body.dark div.wiki .wiki-page,
-body.dark div.wiki .external {
-    color: var(--dark-accent);
 }
 
 /* Flyout menu */
@@ -182,29 +217,17 @@ body.dark .flyout-menu {
     background-color: var(--dark-bg-light);
 }
 
-/* Buttons and notices */
-body.dark input[type="submit"] {
-    background-color: var(--dark-accent) !important;
-    color: var(--dark-text-inverted) !important;
-    border: 1px solid var(--dark-accent) !important;
-}
-
-body.dark input[type="submit"]:hover {
-    background-color: var(--dark-accent-secondary) !important;
-    border-color: var(--dark-accent-secondary) !important;
-}
-
+/* Flash notice */
 body.dark div.flash.notice {
     background-color: transparent !important;
+    border-color: var(--dark-accent) !important;
 }
 
-/* Table row hover - subtle effect */
-body.dark table.list:not(.odd-even) tbody tr:nth-child(odd):hover,
+/* Table row hover */
+body.dark table.list:not(.odd-even) tbody tr:hover,
 body.dark .odd:hover,
-body.dark #issue-changesets div.changeset:nth-child(odd):hover,
-body.dark table.list:not(.odd-even) tbody tr:nth-child(even):hover,
 body.dark .even:hover,
-body.dark #issue-changesets div.changeset:nth-child(even):hover {
+body.dark #issue-changesets div.changeset:hover {
     background-color: var(--dark-hover-subtle);
 }
 
@@ -214,19 +237,7 @@ body.dark .pagination ul.pages li.page:hover {
     background-color: var(--dark-hover);
 }
 
-/* Content links - accent color for visibility */
-body.dark #content a,
-body.dark #content a:link,
-body.dark #content a:visited {
-    color: var(--dark-accent-inverted) !important;
-}
-
-body.dark #content a:hover,
-body.dark #content a:focus {
-    color: var(--dark-accent-secondary-inverted) !important;
-}
-
-/* General text colors */
+/* Main menu */
 body.dark #main-menu,
 body.dark #main-menu li a,
 body.dark #main-menu li a.selected,
@@ -238,10 +249,9 @@ body.dark #flash_error,
 body.dark div.flash.notice,
 body.dark #main-menu .menu-children li a:hover,
 body.dark .highlight {
-    color: var(--dark-text-inverted);
+    color: var(--dark-text-dark);
 }
 
-/* Main menu backgrounds */
 body.dark #main-menu,
 body.dark #main-menu li a.selected,
 body.dark #main-menu li a:hover,
@@ -249,28 +259,24 @@ body.dark #main-menu li a.new-object {
     background: var(--dark-header-bg);
 }
 
-/* Tab styling - accent underline for active tab */
+body.dark #main-menu li a.selected,
+body.dark .ui-widget-header,
+body.dark #main-menu .menu-children {
+    border-color: var(--dark-accent) !important;
+}
+
+/* Tabs */
+body.dark #content .tabs ul li a {
+    border-bottom: 3px solid transparent;
+}
+
 body.dark #content .tabs ul li a.selected {
     border-bottom: 3px solid var(--dark-accent) !important;
     background: transparent !important;
 }
 
-body.dark #content .tabs ul li a {
-    border-bottom: 3px solid transparent;
-}
-
 body.dark #content .tabs ul li a:hover {
     border-bottom: 3px solid var(--dark-accent-secondary) !important;
-}
-
-/* Border colors */
-body.dark #main-menu li a.selected,
-body.dark input[type="submit"],
-body.dark input[type="submit"]:hover,
-body.dark div.flash.notice,
-body.dark .ui-widget-header,
-body.dark #main-menu .menu-children {
-    border-color: var(--dark-accent) !important;
 }
 
 /* Pagination */
@@ -296,7 +302,7 @@ body.dark select optgroup {
     background-color: var(--dark-bg);
 }
 
-/* Progress bar - accent colors */
+/* Progress bar */
 body.dark table.progress td.closed {
     background-color: var(--dark-accent) !important;
 }
@@ -305,14 +311,8 @@ body.dark table.progress td.done {
     background-color: var(--dark-accent-secondary) !important;
 }
 
-/* Activity links */
-body.dark #activity .issue a,
-body.dark #activity .issue-note a,
-body.dark #activity .issue-edit a,
-body.dark #activity .issue-closed a,
-body.dark #activity .wiki-page a,
-body.dark #activity .news a,
-body.dark #activity .attachment a,
+/* Activity & Search links */
+body.dark #activity dt a,
 body.dark #search-results dt a {
     color: var(--dark-text);
 }
@@ -336,10 +336,11 @@ body.dark.theme-Rtmaterial #my-page tr.overdue td.id {
 }
 
 /* ============================================
-   Auto Dark Mode (prefers-color-scheme)
+   AUTO DARK MODE (@media prefers-color-scheme)
+
+   Mirrors body.dark styles for system preference
    ============================================ */
 @media (prefers-color-scheme: dark) {
-    /* Hide toggle when auto-dark is active */
     #dark {
         display: none;
     }
@@ -352,23 +353,19 @@ body.dark.theme-Rtmaterial #my-page tr.overdue td.id {
         filter: invert(90%);
     }
 
-    /* Icons - double inversion compensation */
     body:not(.theme-Rtmaterial) .icon {
         filter: invert(100%);
-        color: var(--dark-pastel-double-invert) !important;
+        color: var(--dark-text-for-double-invert) !important;
     }
 
-    /* Standalone SVGs (not inside .icon) need inversion */
     body svg.icon-svg {
         filter: invert(100%);
     }
 
-    /* SVGs inside .icon - parent already has filter, don't double-invert */
     body .icon svg.icon-svg {
         filter: unset;
     }
 
-    /* Images and elements that need inversion back */
     body .badge,
     body img.gravatar,
     body img.filecontent.image,
@@ -381,30 +378,24 @@ body.dark.theme-Rtmaterial #my-page tr.overdue td.id {
 
     body .diff_out,
     body .diff_in {
-        filter: invert(1);
+        filter: invert(100%);
     }
 
-    /* Overdue styling */
     body table.list tr.overdue td.due_date,
     body div.issue.overdue .due-date .value {
         filter: invert(100%);
         color: var(--dark-accent-secondary);
     }
 
-    /* Header and Top Menu */
     body #header,
     body #top-menu,
     body #project-jump .drdn-trigger {
-        color: var(--dark-pastel-single-invert);
+        color: var(--dark-text-for-invert) !important;
         background: transparent !important;
     }
 
-    body #top-menu {
-        background-color: transparent !important;
-    }
-
     body #top-menu #loggedas {
-        color: var(--dark-pastel-single-invert) !important;
+        color: var(--dark-text-for-invert) !important;
     }
 
     body #header a,
@@ -415,37 +406,57 @@ body.dark.theme-Rtmaterial #my-page tr.overdue td.id {
     body h4,
     body h5,
     body h6,
-    body .wiki a,
-    body .wiki a:link,
-    body .wiki a:visited,
     body #main a.user {
-        color: var(--dark-pastel-single-invert) !important;
+        color: var(--dark-text-for-invert) !important;
     }
 
-    /* Add/New links - button style */
+    body #content a,
+    body #content a:link,
+    body #content a:visited {
+        color: var(--dark-accent-for-invert) !important;
+    }
+
+    body #content a:hover,
+    body #content a:focus {
+        color: var(--dark-accent-secondary-for-invert) !important;
+    }
+
+    body #content a.issue,
+    body #content a.issue:link,
+    body #content a.issue:visited {
+        color: var(--dark-accent-for-invert) !important;
+    }
+
+    body .wiki a,
+    body .wiki a:link,
+    body .wiki a:visited {
+        color: var(--dark-text-for-invert) !important;
+    }
+
+    body input[type="submit"],
     body #content a.icon-add,
     body #content a.icon-add:link,
-    body #content a.icon-add:visited,
-    body #content a.icon-add:hover {
+    body #content a.icon-add:visited {
         background-color: var(--dark-accent) !important;
         color: var(--dark-text) !important;
+        border: 1px solid var(--dark-accent) !important;
         filter: unset !important;
         padding: 4px 8px;
         border-radius: 3px;
         text-decoration: none;
     }
 
+    body input[type="submit"]:hover,
     body #content a.icon-add:hover {
         background-color: var(--dark-accent-secondary) !important;
+        border-color: var(--dark-accent-secondary) !important;
     }
 
-    /* Sidebar */
     body #sidebar a.selected {
         background-color: unset !important;
-        color: var(--dark-text-inverted);
+        color: var(--dark-text-dark);
     }
 
-    /* Login form */
     body #login-form {
         background: unset !important;
         border: unset !important;
@@ -455,7 +466,6 @@ body.dark.theme-Rtmaterial #my-page tr.overdue td.id {
         background: unset !important;
     }
 
-    /* Form inputs */
     body input {
         accent-color: var(--dark-accent) !important;
     }
@@ -468,69 +478,31 @@ body.dark.theme-Rtmaterial #my-page tr.overdue td.id {
         filter: invert(100%);
     }
 
-    /* Issue styling */
     body div.issue {
         background: transparent !important;
     }
 
-    body a.issue,
-    body a.issue:link,
-    body a.issue:visited,
-    body div.wiki .wiki-page,
-    body div.wiki .external {
-        color: var(--dark-accent);
-    }
-
-    /* Flyout menu */
     body .flyout-menu {
         background-color: var(--dark-bg-light);
     }
 
-    /* Buttons and notices */
-    body input[type="submit"] {
-        background-color: var(--dark-accent) !important;
-        color: var(--dark-text-inverted) !important;
-        border: 1px solid var(--dark-accent) !important;
-    }
-
-    body input[type="submit"]:hover {
-        background-color: var(--dark-accent-secondary) !important;
-        border-color: var(--dark-accent-secondary) !important;
-    }
-
     body div.flash.notice {
         background-color: transparent !important;
+        border-color: var(--dark-accent) !important;
     }
 
-    /* Table row hover - subtle effect */
-    body table.list:not(.odd-even) tbody tr:nth-child(odd):hover,
+    body table.list:not(.odd-even) tbody tr:hover,
     body .odd:hover,
-    body #issue-changesets div.changeset:nth-child(odd):hover,
-    body table.list:not(.odd-even) tbody tr:nth-child(even):hover,
     body .even:hover,
-    body #issue-changesets div.changeset:nth-child(even):hover {
+    body #issue-changesets div.changeset:hover {
         background-color: var(--dark-hover-subtle);
     }
 
-    /* Menu hover */
     body #main-menu .menu-children li a:hover,
     body .pagination ul.pages li.page:hover {
         background-color: var(--dark-hover);
     }
 
-    /* Content links - accent color for visibility */
-    body #content a,
-    body #content a:link,
-    body #content a:visited {
-        color: var(--dark-accent-inverted) !important;
-    }
-
-    body #content a:hover,
-    body #content a:focus {
-        color: var(--dark-accent-secondary-inverted) !important;
-    }
-
-    /* General text colors */
     body #main-menu,
     body #main-menu li a,
     body #main-menu li a.selected,
@@ -542,10 +514,9 @@ body.dark.theme-Rtmaterial #my-page tr.overdue td.id {
     body div.flash.notice,
     body #main-menu .menu-children li a:hover,
     body .highlight {
-        color: var(--dark-text-inverted);
+        color: var(--dark-text-dark);
     }
 
-    /* Main menu backgrounds */
     body #main-menu,
     body #main-menu li a.selected,
     body #main-menu li a:hover,
@@ -553,31 +524,25 @@ body.dark.theme-Rtmaterial #my-page tr.overdue td.id {
         background: var(--dark-header-bg);
     }
 
-    /* Tab styling - accent underline for active tab */
-    body #content .tabs ul li a.selected {
-        border-bottom: 3px solid var(--dark-accent) !important;
-        background: transparent !important;
+    body #main-menu li a.selected,
+    body .ui-widget-header,
+    body #main-menu .menu-children {
+        border-color: var(--dark-accent) !important;
     }
 
     body #content .tabs ul li a {
         border-bottom: 3px solid transparent;
     }
 
+    body #content .tabs ul li a.selected {
+        border-bottom: 3px solid var(--dark-accent) !important;
+        background: transparent !important;
+    }
+
     body #content .tabs ul li a:hover {
         border-bottom: 3px solid var(--dark-accent-secondary) !important;
     }
 
-    /* Border colors */
-    body #main-menu li a.selected,
-    body input[type="submit"],
-    body input[type="submit"]:hover,
-    body div.flash.notice,
-    body .ui-widget-header,
-    body #main-menu .menu-children {
-        border-color: var(--dark-accent) !important;
-    }
-
-    /* Pagination */
     body .pagination ul.pages li:first-child {
         border-top-left-radius: 4px;
         border-bottom-left-radius: 4px;
@@ -593,14 +558,12 @@ body.dark.theme-Rtmaterial #my-page tr.overdue td.id {
         border-color: var(--dark-pagination-active);
     }
 
-    /* Select dropdowns */
     body select option,
     body select optgroup {
         color: var(--dark-text);
         background-color: var(--dark-bg);
     }
 
-    /* Progress bar - accent colors */
     body table.progress td.closed {
         background-color: var(--dark-accent) !important;
     }
@@ -609,19 +572,11 @@ body.dark.theme-Rtmaterial #my-page tr.overdue td.id {
         background-color: var(--dark-accent-secondary) !important;
     }
 
-    /* Activity links */
-    body #activity .issue a,
-    body #activity .issue-note a,
-    body #activity .issue-edit a,
-    body #activity .issue-closed a,
-    body #activity .wiki-page a,
-    body #activity .news a,
-    body #activity .attachment a,
+    body #activity dt a,
     body #search-results dt a {
         color: var(--dark-text);
     }
 
-    /* RTmaterial theme support */
     body.theme-Rtmaterial tr.priority-default td.priority {
         border-color: var(--dark-accent-secondary);
     }

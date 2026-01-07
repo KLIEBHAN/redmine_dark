@@ -119,6 +119,12 @@ body.dark #main a.user {
 }
 
 /* Sidebar */
+body.dark #sidebar {
+    background-color: var(--dark-bg-light);
+    border-radius: 4px;
+    padding: 10px;
+}
+
 body.dark #sidebar a.selected {
     background-color: unset !important;
     color: var(--dark-text-inverted);
@@ -406,6 +412,12 @@ body.dark.theme-Rtmaterial #my-page tr.overdue td.id {
     }
 
     /* Sidebar */
+    body #sidebar {
+        background-color: var(--dark-bg-light);
+        border-radius: 4px;
+        padding: 10px;
+    }
+
     body #sidebar a.selected {
         background-color: unset !important;
         color: var(--dark-text-inverted);

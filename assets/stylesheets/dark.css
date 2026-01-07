@@ -217,6 +217,12 @@ body.dark #content a.icon-add:hover {
     border-color: var(--accent-secondary) !important;
 }
 
+/* Button-Icons: Müssen gleiche Farbe wie Button-Text haben.
+   Da filter:unset den Icon-Filter aufhebt, brauchen wir die Inversion-Farbe */
+body.dark #content a.icon-add::before {
+    color: var(--text-shows-light) !important;
+}
+
 /* --- Sidebar --- */
 body.dark #sidebar a.selected {
     background-color: unset !important;
@@ -473,6 +479,9 @@ body.dark.theme-Rtmaterial #my-page tr.overdue td.id {
     body #content a.icon-add:hover {
         background-color: var(--accent-secondary) !important;
         border-color: var(--accent-secondary) !important;
+    }
+    body #content a.icon-add::before {
+        color: var(--text-shows-light) !important;
     }
 
     /* Sidebar */

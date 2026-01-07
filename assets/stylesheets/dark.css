@@ -125,11 +125,11 @@ body.dark:not(.theme-Rtmaterial) .icon {
    würden sonst doppelt invertiert (einmal durch .icon, einmal durch sich selbst) */
 body.dark svg.icon-svg {
     filter: invert(100%);
-    stroke: var(--accent-double-invert) !important;  /* Rosa nach Doppel-Inversion */
+    stroke: #E3E3E3 !important;  /* Wird weißlich nach Doppel-Inversion */
 }
 body.dark .icon svg.icon-svg {
     filter: unset;  /* Verhindert Doppel-Inversion */
-    stroke: var(--accent-shows-secondary) !important;  /* Helles Rosa nach 90%-Inversion */
+    stroke: var(--text-shows-light) !important;  /* Wird weißlich nach 90%-Inversion */
 }
 
 /* --- Bilder und Grafiken ---
@@ -397,11 +397,11 @@ body.dark.theme-Rtmaterial #my-page tr.overdue td.id {
     }
     body svg.icon-svg {
         filter: invert(100%);
-        stroke: var(--accent-double-invert) !important;
+        stroke: #E3E3E3 !important;
     }
     body .icon svg.icon-svg {
         filter: unset;
-        stroke: var(--accent-shows-secondary) !important;
+        stroke: var(--text-shows-light) !important;
     }
 
     /* Bilder */

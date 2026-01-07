@@ -279,6 +279,15 @@ body.dark select optgroup {
     background-color: var(--dark-bg);
 }
 
+/* Progress bar - accent colors */
+body.dark table.progress td.closed {
+    background-color: var(--dark-accent) !important;
+}
+
+body.dark table.progress td.done {
+    background-color: var(--dark-accent-secondary) !important;
+}
+
 /* Activity links */
 body.dark #activity .issue a,
 body.dark #activity .issue-note a,
@@ -555,6 +564,15 @@ body.dark.theme-Rtmaterial #my-page tr.overdue td.id {
     body select optgroup {
         color: var(--dark-text);
         background-color: var(--dark-bg);
+    }
+
+    /* Progress bar - accent colors */
+    body table.progress td.closed {
+        background-color: var(--dark-accent) !important;
+    }
+
+    body table.progress td.done {
+        background-color: var(--dark-accent-secondary) !important;
     }
 
     /* Activity links */

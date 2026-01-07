@@ -119,7 +119,10 @@ body.dark #main a.user {
 }
 
 /* Add/New links - button style */
-body.dark a.icon-add {
+body.dark #content a.icon-add,
+body.dark #content a.icon-add:link,
+body.dark #content a.icon-add:visited,
+body.dark #content a.icon-add:hover {
     background-color: var(--dark-accent) !important;
     color: var(--dark-text) !important;
     padding: 4px 8px;
@@ -127,7 +130,7 @@ body.dark a.icon-add {
     text-decoration: none;
 }
 
-body.dark a.icon-add:hover {
+body.dark #content a.icon-add:hover {
     background-color: var(--dark-accent-secondary) !important;
 }
 
@@ -419,7 +422,10 @@ body.dark.theme-Rtmaterial #my-page tr.overdue td.id {
     }
 
     /* Add/New links - button style */
-    body a.icon-add {
+    body #content a.icon-add,
+    body #content a.icon-add:link,
+    body #content a.icon-add:visited,
+    body #content a.icon-add:hover {
         background-color: var(--dark-accent) !important;
         color: var(--dark-text) !important;
         padding: 4px 8px;
@@ -427,7 +433,7 @@ body.dark.theme-Rtmaterial #my-page tr.overdue td.id {
         text-decoration: none;
     }
 
-    body a.icon-add:hover {
+    body #content a.icon-add:hover {
         background-color: var(--dark-accent-secondary) !important;
     }
 

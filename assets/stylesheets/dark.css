@@ -124,7 +124,7 @@ body.dark #content a.icon-add:link,
 body.dark #content a.icon-add:visited,
 body.dark #content a.icon-add:hover {
     background-color: var(--dark-accent) !important;
-    color: var(--dark-text) !important;
+    color: #050505 !important;
     padding: 4px 8px;
     border-radius: 3px;
     text-decoration: none;
@@ -427,7 +427,7 @@ body.dark.theme-Rtmaterial #my-page tr.overdue td.id {
     body #content a.icon-add:visited,
     body #content a.icon-add:hover {
         background-color: var(--dark-accent) !important;
-        color: var(--dark-text) !important;
+        color: #050505 !important;
         padding: 4px 8px;
         border-radius: 3px;
         text-decoration: none;

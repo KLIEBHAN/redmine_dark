@@ -175,7 +175,7 @@ body.dark input[type="submit"]:hover {
 }
 
 body.dark div.flash.notice {
-    background-color: var(--dark-hover);
+    background-color: transparent !important;
 }
 
 /* Table row hover - subtle effect */
@@ -433,7 +433,7 @@ body.dark.theme-Rtmaterial #my-page tr.overdue td.id {
     }
 
     body div.flash.notice {
-        background-color: var(--dark-hover);
+        background-color: transparent !important;
     }
 
     /* Table row hover - subtle effect */

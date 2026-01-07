@@ -279,16 +279,6 @@ body.dark select optgroup {
     background-color: var(--dark-bg);
 }
 
-/* Section separators - subtle dividing lines */
-body.dark div.issue .description,
-body.dark div.issue #issue_tree,
-body.dark div.issue .related-issues,
-body.dark div.issue #history {
-    border-top: 1px solid var(--dark-hover);
-    padding-top: 15px;
-    margin-top: 15px;
-}
-
 /* Activity links */
 body.dark #activity .issue a,
 body.dark #activity .issue-note a,
@@ -565,16 +555,6 @@ body.dark.theme-Rtmaterial #my-page tr.overdue td.id {
     body select optgroup {
         color: var(--dark-text);
         background-color: var(--dark-bg);
-    }
-
-    /* Section separators - subtle dividing lines */
-    body div.issue .description,
-    body div.issue #issue_tree,
-    body div.issue .related-issues,
-    body div.issue #history {
-        border-top: 1px solid var(--dark-hover);
-        padding-top: 15px;
-        margin-top: 15px;
     }
 
     /* Activity links */

@@ -130,10 +130,10 @@ body.dark svg.icon-svg {
     fill: var(--text-light-double-invert) !important;
 }
 body.dark .icon svg.icon-svg {
-    filter: unset;  /* Verhindert Doppel-Inversion */
-    color: var(--text-shows-light) !important;
-    stroke: var(--text-shows-light) !important;
-    fill: var(--text-shows-light) !important;
+    filter: unset;  /* SVG selbst nicht invertieren, aber .icon ist bereits invertiert */
+    color: var(--text-light-double-invert) !important;
+    stroke: var(--text-light-double-invert) !important;
+    fill: var(--text-light-double-invert) !important;
 }
 
 /* --- Bilder und Grafiken ---
@@ -407,9 +407,9 @@ body.dark.theme-Rtmaterial #my-page tr.overdue td.id {
     }
     body .icon svg.icon-svg {
         filter: unset;
-        color: var(--text-shows-light) !important;
-        stroke: var(--text-shows-light) !important;
-        fill: var(--text-shows-light) !important;
+        color: var(--text-light-double-invert) !important;
+        stroke: var(--text-light-double-invert) !important;
+        fill: var(--text-light-double-invert) !important;
     }
 
     /* Bilder */

@@ -194,9 +194,9 @@ body.dark #content a.issue:visited {
 }
 
 /* Tabellen-Links: Weiß für bessere Lesbarkeit */
-body.dark table.list a,
-body.dark table.list a:link,
-body.dark table.list a:visited {
+body.dark #content table.list a,
+body.dark #content table.list a:link,
+body.dark #content table.list a:visited {
     color: var(--text-shows-light) !important;
 }
 
@@ -468,9 +468,9 @@ body.dark.theme-Rtmaterial #my-page tr.overdue td.id {
     }
 
     /* Tabellen-Links: Weiß für bessere Lesbarkeit */
-    body table.list a,
-    body table.list a:link,
-    body table.list a:visited {
+    body #content table.list a,
+    body #content table.list a:link,
+    body #content table.list a:visited {
         color: var(--text-shows-light) !important;
     }
 

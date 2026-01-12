@@ -185,6 +185,13 @@ body.dark #content a:focus {
     color: var(--accent-shows-secondary) !important;
 }
 
+/* Icon-Links: Diese haben doppelte Inversion (90% + 100%), daher andere Farbe */
+body.dark #content a.icon,
+body.dark #content a.icon:link,
+body.dark #content a.icon:visited {
+    color: var(--text-light-double-invert) !important;  /* Wird zu ~#E5E5E5 nach Doppel-Inversion */
+}
+
 
 /* Wiki-Links: Dunkle Farbe wie Überschriften für Konsistenz */
 body.dark .wiki a,
@@ -446,6 +453,13 @@ body.dark.theme-Rtmaterial #my-page tr.overdue td.id {
     body #content a:hover,
     body #content a:focus {
         color: var(--accent-shows-secondary) !important;
+    }
+
+    /* Icon-Links: Diese haben doppelte Inversion (90% + 100%), daher andere Farbe */
+    body #content a.icon,
+    body #content a.icon:link,
+    body #content a.icon:visited {
+        color: var(--text-light-double-invert) !important;
     }
 
     /* Wiki-Links */

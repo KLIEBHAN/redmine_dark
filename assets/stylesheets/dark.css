@@ -193,6 +193,13 @@ body.dark #content a.issue:visited {
     color: var(--accent-shows-primary) !important;
 }
 
+/* Tabellen-Links: Weiß für bessere Lesbarkeit */
+body.dark table.list a,
+body.dark table.list a:link,
+body.dark table.list a:visited {
+    color: var(--text-shows-light) !important;
+}
+
 /* Wiki-Links: Dunkle Farbe wie Überschriften für Konsistenz */
 body.dark .wiki a,
 body.dark .wiki a:link,
@@ -458,6 +465,13 @@ body.dark.theme-Rtmaterial #my-page tr.overdue td.id {
     body #content a.issue:link,
     body #content a.issue:visited {
         color: var(--accent-shows-primary) !important;
+    }
+
+    /* Tabellen-Links: Weiß für bessere Lesbarkeit */
+    body table.list a,
+    body table.list a:link,
+    body table.list a:visited {
+        color: var(--text-shows-light) !important;
     }
 
     /* Wiki-Links */

@@ -174,31 +174,17 @@ body.dark #main a.user {
     color: var(--text-shows-dark) !important;
 }
 
-/* --- Content-Links: Rosa Akzentfarbe für bessere Sichtbarkeit ---
-   Standard-Linkfarbe würde nach Inversion schlecht lesbar sein */
+/* --- Content-Links: Weiß für bessere Lesbarkeit --- */
 body.dark #content a,
 body.dark #content a:link,
 body.dark #content a:visited {
-    color: var(--accent-shows-primary) !important;
+    color: var(--text-shows-light) !important;
 }
 body.dark #content a:hover,
 body.dark #content a:focus {
     color: var(--accent-shows-secondary) !important;
 }
 
-/* Issue-Links: Gleiche Farbe wie andere Content-Links */
-body.dark #content a.issue,
-body.dark #content a.issue:link,
-body.dark #content a.issue:visited {
-    color: var(--accent-shows-primary) !important;
-}
-
-/* Tabellen-Links: Weiß für bessere Lesbarkeit */
-body.dark #content table.list a,
-body.dark #content table.list a:link,
-body.dark #content table.list a:visited {
-    color: var(--text-shows-light) !important;
-}
 
 /* Wiki-Links: Dunkle Farbe wie Überschriften für Konsistenz */
 body.dark .wiki a,
@@ -451,27 +437,15 @@ body.dark.theme-Rtmaterial #my-page tr.overdue td.id {
         color: var(--text-shows-dark) !important;
     }
 
-    /* Content-Links */
+    /* Content-Links: Weiß für bessere Lesbarkeit */
     body #content a,
     body #content a:link,
     body #content a:visited {
-        color: var(--accent-shows-primary) !important;
+        color: var(--text-shows-light) !important;
     }
     body #content a:hover,
     body #content a:focus {
         color: var(--accent-shows-secondary) !important;
-    }
-    body #content a.issue,
-    body #content a.issue:link,
-    body #content a.issue:visited {
-        color: var(--accent-shows-primary) !important;
-    }
-
-    /* Tabellen-Links: Weiß für bessere Lesbarkeit */
-    body #content table.list a,
-    body #content table.list a:link,
-    body #content table.list a:visited {
-        color: var(--text-shows-light) !important;
     }
 
     /* Wiki-Links */

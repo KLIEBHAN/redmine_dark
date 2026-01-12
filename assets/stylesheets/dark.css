@@ -125,11 +125,13 @@ body.dark:not(.theme-Rtmaterial) .icon {
    würden sonst doppelt invertiert (einmal durch .icon, einmal durch sich selbst) */
 body.dark svg.icon-svg {
     filter: invert(100%);
+    color: var(--text-light-double-invert) !important;
     stroke: var(--text-light-double-invert) !important;
     fill: var(--text-light-double-invert) !important;
 }
 body.dark .icon svg.icon-svg {
     filter: unset;  /* Verhindert Doppel-Inversion */
+    color: var(--text-shows-light) !important;
     stroke: var(--text-shows-light) !important;
     fill: var(--text-shows-light) !important;
 }
@@ -399,11 +401,13 @@ body.dark.theme-Rtmaterial #my-page tr.overdue td.id {
     }
     body svg.icon-svg {
         filter: invert(100%);
+        color: var(--text-light-double-invert) !important;
         stroke: var(--text-light-double-invert) !important;
         fill: var(--text-light-double-invert) !important;
     }
     body .icon svg.icon-svg {
         filter: unset;
+        color: var(--text-shows-light) !important;
         stroke: var(--text-shows-light) !important;
         fill: var(--text-shows-light) !important;
     }

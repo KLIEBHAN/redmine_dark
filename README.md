@@ -7,13 +7,13 @@
 | Color | Hex | Usage |
 |-------|-----|-------|
 | Aubergine | `#1E1924` | Primary background |
-| Rosa | `#C46B8C` | Accent color (links, borders) |
-| Pink | `#D4849E` | Secondary accent |
-| Light Pink | `#E09DB3` | Highlights |
-| Purple-Gray | `#4A3545` | Hover effects |
-| Near-White | `#EAEAEA` | Primary text |
-| Light Gray | `#F5F5F5` | Secondary background |
-| Pastel Lavender | `#DED0EB` | Headers, icons (after inversion) |
+| Rosa | `#C46B8C` | Accent color (buttons, borders, hover) |
+| Pink | `#D4849E` | Secondary accent (link hover) |
+| Light Pink | `#E09DB3` | Highlights, priorities |
+| Purple-Gray | `#4A3545` | Dark hover effects |
+| Near-White | `#EAEAEA` | Primary text, links, icons |
+| Light Gray | `#F5F5F5` | Menu background |
+| Pastel Lavender | `#DED0EB` | Headers (after inversion) |
 
 ## Features
 
@@ -68,10 +68,18 @@ Click **"dark mode"** in the top right corner (after login) to toggle.
 
 ## Technical Notes
 
-This plugin uses CSS `filter: invert(90%)` for dark mode. Colors are calculated to display correctly after inversion:
+This plugin uses CSS `filter: invert(90%)` on the body for dark mode. Colors are calculated to display correctly after inversion:
 
-- Elements with `filter: invert(100%)`: Use `#F6E4FF` to display as pastel lavender
-- Elements without own filter: Use `#091B00` to display as pastel lavender
+**Inversion math:** `displayed_color = 229.5 - (0.9 × set_color)`
+
+| Context | Set Color | Displayed As |
+|---------|-----------|--------------|
+| Single inversion (body only) | `#000000` | Light gray (~#E5E5E5) |
+| Double inversion (body + element) | `#E3E3E3` | Light gray (~#E5E5E5) |
+
+- **Content links & text:** White for better readability
+- **SVG icons:** Use `stroke` with calculated colors for proper display
+- **Images & badges:** Counter-inverted to preserve original colors
 
 ## License
 
